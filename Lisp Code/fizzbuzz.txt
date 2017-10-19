@@ -1,0 +1,53 @@
+;;William Whitecar - Cs 3210 - Fall 2017
+;;======================================
+;; HelperFizzBuzz Function: 
+;;  If divisible by 3 print a list with number and fizz
+;;  If divisible by 5 print a list with number and buzz
+;;  If dibisible by both print a list with number and fizzbuzz
+;;  else print the number
+;; Parameters: 
+;;  start - the first value we will be counting from
+;; Assumptions: 
+;;   N/A
+
+(defun helperfizzbuzz(start)
+    (cond ((> start '20) ())
+
+          (( and (= 0 (mod start 3)) (= 0 (mod start 5)))
+               (cons (list start '(fizz buzz)) 
+                        (helperfizzbuzz (+ start 1))))
+
+          ((= 0 (mod start 3))
+              (cons ( list start 'fizz) 
+                      (helperfizzbuzz (+ start 1))))
+
+          ((= 0 (mod start 5))
+              (cons (list start 'buzz) 
+                      (helperfizzbuzz (+ start 1))))
+
+           (t    (cons start (helperfizzbuzz (+ start 1))))
+   )
+)
+
+;;Test plan for HelperFizzBuzz
+;;Description       data                       result
+;;----------------------------------------------------
+;;Over 20           25                          ()
+;;Start @ 15        15       ((15 FIZZBUZZ) 16 17 (18 FIZZ) 19 (20 BUZZ))
+;;Overall test      1
+;;             (1 2 (3 FIZZ) 4 (5 BUZZ) (6 Fizz) 7 8 (9 FIZZ) (10 BUZZ)
+;;             11 (12 FIZZ) 13 14 (15 FIZZBUZZ) 16 17 (18 FIZZ) 19 (20 BUZZ))
+
+(print (helperfizzbuzz 25))
+(print (helperfizzbuzz 15))
+(print (helperfizzbuzz 1))           
+
+(defun fizzbuzz()
+    (helperfizzbuzz '1))
+
+;;Test plan for FizzBuzz
+;;Description         result
+;;---------------------------
+;;Only test   (1 2 (3 FIZZ) 4 (5 BUZZ) (6 Fizz) 7 8 (9 FIZZ) (10 BUZZ)
+;;             11 (12 FIZZ) 13 14 (15 FIZZBUZZ) 16 17 (18 FIZZ) 19 (20 BUZZ))
+(print (fizzbuzz))

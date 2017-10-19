@@ -1,0 +1,91 @@
+;; William Whitecar - Cs 3210 - Fall 2017
+;;=======================================
+;;Count-groups Function:
+;;  Given a list, count the number of groups.
+;;Parameters:
+;;  lst - a list of both atoms and numbers
+;;Assumtion:
+;;  1. The list contains no nexted lists.
+
+(defun count-groups (lst)
+  (cond ((null lst)   0)
+
+	((and (and (atom (car lst)) (atom (car (cdr lst))))
+	      (equal (car lst) (car (cdr lst))))
+	   (+ '1 (count-groups ( find-different-value (car lst) (cdr lst)))))
+
+	((and (and (numberp (car lst)) (numberp (car (cdr lst))))
+	      (= (car lst) (car (cdr lst))))
+	   (+ '1 (count-groups (find-different-value (car lst) (cdr lst)))))
+
+	(t   (count-groups (cdr lst)))
+))
+
+;;Test plan for count-groups function
+;;Catagory                data                          expected result
+;;------------------------------------------------------------------
+;;No word groups          (a b c)                              0
+;;Matching atom           (here kitty kitty)                   1
+;;2 Matching atom         (happy happy joy joy)                2
+;;Mixed w/ matches        (yes no no 23 -101 yes yes yes)      2
+;;Single number           (7 7 7 7 7 7 7 7)                    1
+;;matching number         (7 7 8 9 9 10 10 6)                  3
+;;No match number         (1 2 3 4 5 6 7 8 9)                  0
+;;Empty list              ()                                   0
+;;More then 2 adjacent    (a a a b b b c c c)                  3
+;;Alternate atom number   (1 cat 2 b 3 c 4 c 3 2 a 1)          0
+
+
+;; Find-Different-Value Function;
+;;   Will traverse a list looking for the first
+;;   item that doesnt match the element and will 
+;;   return the remaining list starting at the first
+;;   non-mathching element
+;; Parameters:
+;;   element - element we are trying to not match
+;;   lst - list of elements with both atoms and numbers
+;; Assumtions: 
+;;   1. No nested lists
+
+(defun find-different-value (element lst)
+  (cond ((null lst) ())
+
+	((and (and (atom element) (atom (car lst)))
+	      (equal element (car lst)))
+	   (find-different-value element (cdr lst)))
+
+	((and (and (numberp element) (numberp (car lst)))
+	      (= element (car lst)))
+	   (find-different-value element (cdr lst)))
+
+	(t   lst)))
+
+;;Test plan for count-groups function
+;;Catagory                data                          expected result
+;;---------------------------------------------------------------------
+;;Empty List            (word): ()                                NIL
+;;Not match Singleton   (word): (not)                             (not)
+;;Match Singleton       (word): (word)                            NIL
+;;Many words matching   (word): (word word word word)             NIL
+;;Matchs trailed by not (word): (word word word nope word)      (nope word)
+;;No matces             (word): (this dosnt match)           (this doesnt match)
+
+(print (find-different-value 'word '()))
+(print (find-different-value 'word '(not)))
+(print (find-different-value 'word '(word)))
+(print (find-different-value 'word '(word word word word)))
+(print (find-different-value 'word '(word word word nope word)))
+(print (find-different-value 'word '(this doesnt match)))
+
+
+(print (count-groups '(a b c)))
+(print (count-groups '(here kitty kitty)))
+(print (count-groups '(happy happy joy joy)))
+(print (count-groups '(yes no no 23 -101 yes yes yes)))
+(print (count-groups '(7 7 7 7 7 7 7)))
+(print (count-groups '(7 7 8 9 9 10 10 6)))
+(print (count-groups '(1 2 3 4 5 6 7 8 9)))
+(print (count-groups '()))
+(print (count-groups '(a a a b b b c c c)))
+(print (count-groups '(1 cat 2 b 3 c 4 c 3 b 2 a 1)))
+
